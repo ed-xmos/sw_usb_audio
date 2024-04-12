@@ -1,4 +1,4 @@
-# Copyright (c) 2022, XMOS Ltd, All rights reserved
+# Copyright (c) 2024, XMOS Ltd, All rights reserved
 from pathlib import Path
 import pytest
 import subprocess
@@ -20,14 +20,14 @@ from usb_audio_test_utils import (
 from conftest import list_configs, get_config_features
 
 
-class SpdifClockSrc:
+class AdatClockSrc:
     def __init__(self):
         self.cmd = [get_volcontrol_path()]
         if platform.system() == "Windows":
             self.cmd.append(f"-g{get_tusb_guid()}")
 
     def __enter__(self):
-        cmd = self.cmd + ["--clock", "SPDIF"]
+        cmd = self.cmd + ["--clock", "ADAT"]
         subprocess.run(cmd, timeout=10)
         # Short delay to wait for clock source
         time.sleep(5)
@@ -38,7 +38,7 @@ class SpdifClockSrc:
         subprocess.run(cmd, timeout=10)
 
 
-def spdif_common_uncollect(features, board, pytestconfig):
+def adat_common_uncollect(features, board, pytestconfig):
     xtag_ids = get_xtag_dut_and_harness(pytestconfig, board)
     # XTAGs not present
     if not all(xtag_ids):
@@ -48,21 +48,21 @@ def spdif_common_uncollect(features, board, pytestconfig):
     return False
 
 
-def spdif_input_uncollect(pytestconfig, board, config):
+def adat_input_uncollect(pytestconfig, board, config):
     features = get_config_features(board, config)
     return any(
-        [not features["spdif_i"], spdif_common_uncollect(features, board, pytestconfig)]
+        [not features["adat_i"], adat_common_uncollect(features, board, pytestconfig)]
     )
 
 
-def spdif_output_uncollect(pytestconfig, board, config):
+def adat_output_uncollect(pytestconfig, board, config):
     features = get_config_features(board, config)
     return any(
-        [not features["spdif_o"], spdif_common_uncollect(features, board, pytestconfig)]
+        [not features["adat_o"], adat_common_uncollect(features, board, pytestconfig)]
     )
 
 
-def spdif_duration(level, partial):
+def adat_duration(level, partial):
     if level == "weekend":
         duration = 90 if partial else 1200
     elif level == "nightly":
@@ -72,22 +72,23 @@ def spdif_duration(level, partial):
     return duration
 
 
-@pytest.mark.uncollect_if(func=spdif_input_uncollect)
+@pytest.mark.uncollect_if(func=adat_input_uncollect)
 @pytest.mark.parametrize(["board", "config"], list_configs())
-def test_spdif_input(pytestconfig, board, config):
+def test_adat_input(pytestconfig, board, config):
     features = get_config_features(board, config)
 
+    # xsig_config = f'mc_digital_input_{features["analogue_i"]}ch'
     xsig_config = f'mc_digital_input_{features["analogue_i"]}ch'
     xsig_config_path = Path(__file__).parent / "xsig_configs" / f"{xsig_config}.json"
 
     adapter_dut, adapter_harness = get_xtag_dut_and_harness(pytestconfig, board)
-    duration = spdif_duration(pytestconfig.getoption("level"), features["partial"])
+    duration = adat_duration(pytestconfig.getoption("level"), features["partial"])
     fail_str = ""
 
     with XrunDut(adapter_dut, board, config) as dut:
         for fs in features["samp_freqs"]:
             with AudioAnalyzerHarness(
-                adapter_harness, config="spdif_test", xscope="app"
+                adapter_harness, config="adat_test", xscope="app"
             ) as harness:
                 xscope_controller = get_xscope_controller_path()
                 ret = subprocess.run(
@@ -109,7 +110,7 @@ def test_spdif_input(pytestconfig, board, config):
                     pytest.fail(fail_str)
 
                 with (
-                    SpdifClockSrc(),
+                    AdatClockSrc(),
                     XsigInput(
                         fs, duration, xsig_config_path, dut.dev_name
                     ) as xsig_proc,
@@ -139,23 +140,23 @@ def test_spdif_input(pytestconfig, board, config):
         pytest.fail(fail_str)
 
 
-@pytest.mark.uncollect_if(func=spdif_output_uncollect)
+@pytest.mark.uncollect_if(func=adat_output_uncollect)
 @pytest.mark.parametrize(["board", "config"], list_configs())
-def test_spdif_output(pytestconfig, board, config):
+def test_adat_output(pytestconfig, board, config):
     features = get_config_features(board, config)
 
     xsig_config = f'mc_digital_output_{features["analogue_o"]}ch'
     xsig_config_path = Path(__file__).parent / "xsig_configs" / f"{xsig_config}.json"
 
     adapter_dut, adapter_harness = get_xtag_dut_and_harness(pytestconfig, board)
-    duration = spdif_duration(pytestconfig.getoption("level"), features["partial"])
+    duration = adat_duration(pytestconfig.getoption("level"), features["partial"])
     fail_str = ""
 
     with XrunDut(adapter_dut, board, config) as dut:
         for fs in features["samp_freqs"]:
             with (
                 AudioAnalyzerHarness(
-                    adapter_harness, config="spdif_test", xscope="io"
+                    adapter_harness, config="adat_test", xscope="io"
                 ) as harness,
                 XsigOutput(fs, None, xsig_config_path, dut.dev_name),
             ):
