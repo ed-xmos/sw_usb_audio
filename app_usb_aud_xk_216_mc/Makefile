@@ -1,16 +1,20 @@
-# The TARGET variable determines what target system the application is
+# The TARGET variable determines what target system the application is 
 # compiled for. It either refers to an XN file in the source directories
 # or a valid argument for the --target option when compiling.
 
 TARGET = xk-audio-216-mc.xn
 APP_NAME =
 
+
+
+
 # The flags passed to xcc when building the application
 # The EXTRA_BUILD_FLAGS variable can be used on the xmake command line to add options
-BUILD_FLAGS    = $(EXTRA_BUILD_FLAGS) -fcomment-asm -O3 -report -lquadflash -g -fxscope -march=xs2a -DUSB_TILE=tile[1] -DADAT_TX_USE_SHARED_BUFF=1 -DXUA_QUAD_SPI_FLASH=1
+BUILD_FLAGS    = $(EXTRA_BUILD_FLAGS) -Xmapper --map -Xmapper mapfile.txt  -fcomment-asm -O3 -report -lquadflash -g -fxscope -march=xs2a -DUSB_TILE=tile[1] -DADAT_TX_USE_SHARED_BUFF=1 -DQUAD_SPI_FLASH=1  
+#BUILD_FLAGS    = $(EXTRA_BUILD_FLAGS)   -fcomment-asm -O3 -report -lquadflash -g -fxscope -march=xs2a -DUSB_TILE=tile[1] -DADAT_TX_USE_SHARED_BUFF=1 -DQUAD_SPI_FLASH=1  
 
 # The USED_MODULES variable lists other module used by the application. These
-# modules will extend the SOURCE_DIRS, INCLUDE_DIRS and LIB_DIRS variables.
+# modules will extend the SOURCE_DIRS, INCLUDE_DIRS and LIB_DIRS variables. 
 # Modules are expected to be in the directory above the BASE_DIR directory.
 USED_MODULES = lib_xua lib_i2c
 
@@ -33,8 +37,9 @@ USED_MODULES = lib_xua lib_i2c
 # Fully tested build configs (Note these make use of the defaults in xua_conf.h)
 
 # Audio Class 1, I2S Master, 2xInput, 2xOutput
-INCLUDE_ONLY_IN_1AMi2o2xxxxxx =
-XCC_FLAGS_1AMi2o2xxxxxx = $(BUILD_FLAGS)        -DAUDIO_CLASS=1
+INCLUDE_ONLY_IN_1AMi2o2xxxxxx = 
+XCC_FLAGS_1AMi2o2xxxxxx = $(BUILD_FLAGS)        -DAUDIO_CLASS=1 
+#XCC_MAP_FLAGS_1AMi2o2xxxxxx = -Xmapper --map -Xmapper mapfile.txt
 
 # Audio Class 2, I2S Master, 10xInput, 10xOutput, S/PDIF Rx, S/PDIF Tx
 INCLUDE_ONLY_IN_2AMi10o10xssxxx =
@@ -46,11 +51,6 @@ INCLUDE_ONLY_IN_2ASi10o10xssxxx =
 XCC_FLAGS_2ASi10o10xssxxx = $(BUILD_FLAGS)      -DXUA_SPDIF_RX_EN=1 \
                                                 -DXUA_SPDIF_TX_EN=1 \
                                                 -DCODEC_MASTER=1
-
-# Audio Class 2, Async, I2S Master, 8xInput, 10xOutput, MIDI, S/PDIF Tx
-INCLUDE_ONLY_IN_2AMi8o10mxsxxx =
-XCC_FLAGS_2AMi8o10mxsxxx = $(BUILD_FLAGS) 		-DMIDI=1 \
-												-DXUA_SPDIF_TX_EN=1
 
 # Audio Class 2, Async, I2S Slave, 16xInput 16xOutput (TDM)
 # Note, TDM requires more MIPs than I2S so we do volume processin in the decouple task
@@ -64,17 +64,6 @@ XCC_FLAGS_2ASi16o16xxxxxx_tdm8 = $(BUILD_FLAGS) -DI2S_CHANS_ADC=16 \
                                                 -DCODEC_MASTER=1 \
                                                 -DOUT_VOLUME_IN_MIXER=0
 
-# Audio Class 2, Async, I2S Master, 16xInput, 8xOutput, ADAT Rx
-INCLUDE_ONLY_IN_2AMi16o8xxxaxx =
-XCC_FLAGS_2AMi16o8xxxaxx = $(BUILD_FLAGS)       -DXUA_ADAT_RX_EN=1
-
-# Audio Class 2, Async, I2S master, 8xInput, 16xOutput, ADAT Tx
-INCLUDE_ONLY_IN_2AMi8o16xxxxax =
-XCC_FLAGS_2AMi8o16xxxxax = $(BUILD_FLAGS)       -DXUA_ADAT_TX_EN=1
-
-# Audio Class 2, Async, I2S Master, 16xInput, 16xOutput, ADAT Tx, ADAT Rx
-INCLUDE_ONLY_IN_2AMi16o16xxxaax =
-XCC_FLAGS_2AMi16o16xxxaax = $(BUILD_FLAGS)      -DXUA_ADAT_TX_EN=1 -DXUA_ADAT_RX_EN=1
 
 ifneq ($(CONFIG),)
 BUILD_TEST_CONFIGS = 1

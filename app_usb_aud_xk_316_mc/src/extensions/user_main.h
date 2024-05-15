@@ -1,5 +1,5 @@
-#ifndef _USER_MAIN_H_
-#define _USER_MAIN_H_
+#ifndef USER_MAIN_H
+#define USER_MAIN_H
 
 #ifdef __XC__
 
@@ -10,7 +10,7 @@
 
 extern unsafe client interface i2c_master_if i_i2c_client;
 extern void interface_saver(client interface i2c_master_if i);
-extern void board_setup();
+extern void ctrlPort();
 
 /* I2C interface ports */
 extern port p_scl;
@@ -20,7 +20,7 @@ extern port p_sda;
     interface i2c_master_if i2c[1];
 
 #define USER_MAIN_CORES on tile[0]: {\
-                                        board_setup();\
+                                        ctrlPort();\
                                         i2c_master(i2c, 1, p_scl, p_sda, 100);\
                                     }\
                         on tile[1]: {\

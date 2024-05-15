@@ -46,3 +46,7 @@ legacy_tests/generated_*.wav
 doc/pdf/sw_usb_audio.pdf
 toplevel_doc
 Bach_loopback.mid
+app_usb_audio_awe/.metadata
+app_usb_audio_awe_small/.metadata
+app_usb_audio_awe_small_qf60/.metadata
+app_zoom_demo/.metadata

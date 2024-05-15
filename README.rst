@@ -1,8 +1,9 @@
 XMOS USB Audio 2.0 Reference Design README
 ##########################################
 
-:Version: 8.0.0
+:Version: 7.3.1
 :Vendor: XMOS
+
 
 Please note, Alpha and Beta releases may not accurately reflect the final release and documentation may not be complete. These early releases are not suitable for a production context, and are provided for evaluation purposes only. See 'Release Quality & QA'.
 
@@ -27,8 +28,8 @@ typically relate to a specific hardware platform.  This repository contains the 
 
 Please refer to individual README files in these apps for more detailed information.
 
-Each application contains a "core" folder, this folder contains items that are required to use and run the USB Audio application framework.
-Mandatory files per application include:
+Each application contains a "core" folder, this folder contains items that are required to use and run the USB Audio application framework.  
+Mandatory files per application include: 
 
 - An XN file describing the board including required port defines. The XN file is referenced in the application makefile.
 - xua_conf.h header file containing configuration items such as channel count, strings etc.
@@ -42,7 +43,7 @@ Key Features
 
 Key features of the various applications in this repository are listed below.  Please refer to the application README the specific feature set supported by that application.
 
-- USB Audio Class 1.0/2.0 Compliant
+- USB Audio Class 1.0/2.0 Compliant 
 
 - Fully Asynchronous operation (Synchronous mode as an option)
 
@@ -78,33 +79,33 @@ Release Quality & QA
 +---------------------------+--------------------------+
 | Feature                   | Quality                  |
 +===========================+==========================+
-| Audio Class 1.0 Streaming | Release                  |
+| Audio Class 1.0 Streaming | Release                  | 
 +---------------------------+--------------------------+
-| Audio Class 2.0 Streaming | Release                  |
+| Audio Class 2.0 Streaming | Release                  | 
 +---------------------------+--------------------------+
-| I2S Master                | Release                  |
+| I2S Master                | Release                  | 
 +---------------------------+--------------------------+
-| I2S Slave                 | Release                  |
+| I2S Slave                 | Release                  | 
 +---------------------------+--------------------------+
-| TDM Master                | Release                  |
+| TDM Master                | Release                  | 
 +---------------------------+--------------------------+
-| TDM Slave                 | Release                  |
+| TDM Slave                 | Release                  | 
 +---------------------------+--------------------------+
-| S/PDIF Receive            | Release                  |
+| S/PDIF Receive            | Release                  | 
 +---------------------------+--------------------------+
-| S/PDIF Transmit           | Release                  |
+| S/PDIF Transmit           | Release                  | 
 +---------------------------+--------------------------+
-| ADAT Receive              | Beta                     |
+| ADAT Receive              | Beta                     | 
 +---------------------------+--------------------------+
-| ADAT Transmit             | Beta                     |
+| ADAT Transmit             | Beta                     | 
 +---------------------------+--------------------------+
-| MIDI I/O                  | Beta                     |
+| MIDI I/O                  | Beta                     | 
 +---------------------------+--------------------------+
-| DSD Playback              | Beta                     |
+| DSD Playback              | Beta                     | 
 +---------------------------+--------------------------+
-| Mixer                     | Release                  |
+| Mixer                     | Release                  | 
 +---------------------------+--------------------------+
-| HID Controls              | Beta                     |
+| HID Controls              | Beta                     | 
 +---------------------------+--------------------------+
 
 Known Issues
@@ -118,13 +119,13 @@ General known issues with this release are listed below.  For board/application 
 
 - (xmos/sw_usb_audio#99) Input via TDM master unreliable due to low-level timing issues (xcore-200 only)
 
-- (xmos/sw_usb_audio#120) Playback glitches experienced at 44.1/48kHz when using ASIO4ALL (v2.15) with built-in windows drivers. USB bus traces prove that these originate from the host driver.
+- (xmos/sw_usb_audio#132) Output glitches experienced on some laptops due to Thesycon driver outputting zero samples. This is under investigation by Thesycon.
 
 - (#14762) When in DSD mode with S/PDIF output enabled, DSD samples are transmitted over S/PDIF if the DSD and S/PDIF channels are shared, this may or may not be desired
 
 - (#14173) I2S input is completely disabled when DSD output is active - any input stream to the host will contain 0 samples
 
-- (#14780) Operating the design at a sample rate of less than or equal to the SOF rate (i.e. 8kHz at HS, 1kHz at FS) may expose a corner case relating to 0 length packet handling in both the driver and device and should be considered unsupported at this time.
+- (#14780) Operating the design at a sample rate of less than or equal to the SOF rate (i.e. 8kHz at HS, 1kHz at FS) may expose a corner case relating to 0 length packet handling in both the driver and device and should be considered un-supported at this time.
 
 - (#14883) Before DoP mode is detected a small number of DSD samples will be played out as PCM via I2S
 
@@ -161,15 +162,14 @@ Required Software (dependencies)
 ================================
 
   * lib_xua (www.github.com/xmos/lib_xua)
-  * lib_adat (www.github.com/xmos/lib_adat)
   * lib_locks (www.github.com/xmos/lib_locks)
   * lib_logging (www.github.com/xmos/lib_logging)
   * lib_mic_array (www.github.com/xmos/lib_mic_array)
   * lib_xassert (www.github.com/xmos/lib_xassert)
   * lib_dsp (www.github.com/xmos/lib_dsp)
   * lib_spdif (www.github.com/xmos/lib_spdif)
-  * lib_sw_pll (www.github.com/xmos/lib_sw_pll)
   * lib_xud (www.github.com/xmos/lib_xud)
+  * lib_adat (www.github.com/xmos/lib_adat)
   * lib_i2c (www.github.com/xmos/lib_i2c)
   * lib_i2s (www.github.com/xmos/lib_i2s)
 
@@ -182,3 +182,4 @@ Support
 =======
 
 This package is supported by XMOS Ltd. Issues can be raised against the software at: http://www.xmos.com/support
+
