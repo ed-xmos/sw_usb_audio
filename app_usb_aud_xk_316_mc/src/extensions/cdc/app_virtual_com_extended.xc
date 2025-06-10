@@ -1,6 +1,6 @@
 // Copyright (c) 2015, XMOS Ltd, All rights reserved
 
-#ifdef CDC_VSP
+#if CDC_VSP
 
 #include <platform.h>
 #include <xs1.h>
