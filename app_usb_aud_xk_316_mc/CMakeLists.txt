@@ -3,7 +3,12 @@ include($ENV{XMOS_CMAKE_PATH}/xcommon.cmake)
 project(app_usb_aud_xk_316_mc)
 
 set(APP_HW_TARGET xk-audio-316-mc.xn)
-include(${CMAKE_CURRENT_LIST_DIR}/../deps.cmake)
+
+set(APP_DEPENDENT_MODULES "ed-xmos/lib_xua(feature/cdc)"
+                          "lib_i2c(6.4.0)"
+                          "lib_i2s(6.0.1)"
+                          "lib_board_support(develop)")
+
 set(APP_PCA_ENABLE ON)
 set(SW_USB_AUDIO_FLAGS ${EXTRA_BUILD_FLAGS} -O3
                                             -report
