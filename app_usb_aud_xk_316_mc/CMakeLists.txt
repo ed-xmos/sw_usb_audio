@@ -22,6 +22,9 @@ set(SW_USB_AUDIO_FLAGS ${EXTRA_BUILD_FLAGS} -O3
 
 set(APP_COMPILER_FLAGS_2AMi8o8xxxxxx ${SW_USB_AUDIO_FLAGS})
 
+set(APP_COMPILER_FLAGS_2AMi8o8xxxxxx_cdc ${SW_USB_AUDIO_FLAGS}  -DCDC_VSP=1
+                                                                -DCDC_DEBUG=1)
+
 set(APP_COMPILER_FLAGS_2AMi8o8xxxxxx_mix8 ${SW_USB_AUDIO_FLAGS} -DMAX_MIX_COUNT=8)
 
 set(APP_COMPILER_FLAGS_2AMi8o8xxxxxx_tdm8 ${SW_USB_AUDIO_FLAGS} -DXUA_PCM_FORMAT=XUA_PCM_FORMAT_TDM
@@ -58,7 +61,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/configs_partial.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/configs_build.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/configs_test.cmake)
 
-set(APP_INCLUDES src src/core src/extensions)
+set(APP_INCLUDES src src/core src/extensions src/extensions/cdc)
 set(XMOS_SANDBOX_DIR ${CMAKE_CURRENT_LIST_DIR}/../..)
 
 XMOS_REGISTER_APP()
