@@ -1,4 +1,5 @@
-// Copyright (c) 2015, XMOS Ltd, All rights reserved
+// Copyright 2025 XMOS LIMITED.
+// This Software is subject to the terms of the XMOS Public Licence: Version 1.
 
 #if CDC_VSP
 
@@ -16,22 +17,11 @@
 #define DEBOUNCE_TIME   (XS1_TIMER_HZ/50)
 #define BUTTON_PRESSED  0x00
 
-// FXOS8700EQ register address defines - From AN00181
-#define FXOS8700EQ_I2C_ADDR 0x1E
-#define FXOS8700EQ_XYZ_DATA_CFG_REG 0x0E
-#define FXOS8700EQ_CTRL_REG_1 0x2A
-#define FXOS8700EQ_DR_STATUS 0x0
-#define FXOS8700EQ_OUT_X_MSB 0x1
-#define FXOS8700EQ_OUT_X_LSB 0x2
-#define FXOS8700EQ_OUT_Y_MSB 0x3
-#define FXOS8700EQ_OUT_Y_LSB 0x4
-#define FXOS8700EQ_OUT_Z_MSB 0x5
-#define FXOS8700EQ_OUT_Z_LSB 0x6
 
-/* PORT_4A connected to the 4 LEDs */
+/* connected to the 4 LEDs */
 on tile[0]: port p_led = XS1_PORT_4F;
 
-/* PORT_4C connected to the 2 Buttons */
+/* connected to the 3 Buttons */
 on tile[0]: port p_button = XS1_PORT_4E;
 
 char app_menu[MENU_LIST][MENU_MAX_CHARS] = {

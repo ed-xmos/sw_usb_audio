@@ -1,140 +1,15 @@
-// Copyright (c) 2015, XMOS Ltd, All rights reserved
+// Copyright 2025 XMOS LIMITED.
+// This Software is subject to the terms of the XMOS Public Licence: Version 1.
 
 #include <xs1.h>
 #include <stdio.h>
 #include <string.h>
-//#include "usb.h"
 #include "xud.h"                 /* XUD user defines and functions */
 #include "usb_std_requests.h"
 #include "usb_std_descriptors.h"
 #include "xud_cdc.h"
 #include "cdc_descriptor_defs.h"
 
-#if 0 // These descriptors were merged with those in descriptors.h
-/* Definition of Descriptors */
-/* USB Device Descriptor */
-static unsigned char devDesc[] =
-{
-    0x12,                  /* 0  bLength */
-    USB_DESCTYPE_DEVICE,   /* 1  bdescriptorType - Device*/
-    0x00,                  /* 2  bcdUSB version */
-    0x02,                  /* 3  bcdUSB version */
-    USB_CLASS_COMMUNICATIONS,/* 4  bDeviceClass - USB CDC Class */
-    0x00,                  /* 5  bDeviceSubClass  - Specified by interface */
-    0x00,                  /* 6  bDeviceProtocol  - Specified by interface */
-    0x40,                  /* 7  bMaxPacketSize for EP0 - max = 64*/
-    (VENDOR_ID & 0xFF),    /* 8  idVendor */
-    (VENDOR_ID >> 8),      /* 9  idVendor */
-    (PRODUCT_ID & 0xFF),   /* 10 idProduct */
-    (PRODUCT_ID >> 8),     /* 11 idProduct */
-    (BCD_DEVICE & 0xFF),   /* 12 bcdDevice */
-    (BCD_DEVICE >> 8),     /* 13 bcdDevice */
-    0x01,                  /* 14 iManufacturer - index of string*/
-    0x02,                  /* 15 iProduct  - index of string*/
-    0x03,                  /* 16 iSerialNumber  - index of string*/
-    0x01                   /* 17 bNumConfigurations */
-};
-
-/* USB Configuration Descriptor */
-static unsigned char cfgDesc[] = {
-
-  0x09,                       /* 0  bLength */
-  USB_DESCTYPE_CONFIGURATION, /* 1  bDescriptortype - Configuration*/
-  0x43, 0x00,                 /* 2  wTotalLength */
-  0x02,                       /* 4  bNumInterfaces */
-  0x01,                       /* 5  bConfigurationValue */
-  0x04,                       /* 6  iConfiguration - index of string */
-  0x80,                       /* 7  bmAttributes - Bus powered */
-  0xC8,                       /* 8  bMaxPower - 400mA */
-
-  /* CDC Communication interface */
-  0x09,                       /* 0  bLength */
-  USB_DESCTYPE_INTERFACE,     /* 1  bDescriptorType - Interface */
-  0x00,                       /* 2  bInterfaceNumber - Interface 0 */
-  0x00,                       /* 3  bAlternateSetting */
-  0x01,                       /* 4  bNumEndpoints */
-  USB_CLASS_COMMUNICATIONS,   /* 5  bInterfaceClass */
-  USB_CDC_ACM_SUBCLASS,       /* 6  bInterfaceSubClass - Abstract Control Model */
-  USB_CDC_AT_COMMAND_PROTOCOL,/* 7  bInterfaceProtocol - AT Command V.250 protocol */
-  0x00,                       /* 8  iInterface - No string descriptor */
-
-  /* Header Functional descriptor */
-  0x05,                      /* 0  bLength */
-  USB_DESCTYPE_CS_INTERFACE, /* 1  bDescriptortype, CS_INTERFACE */
-  0x00,                      /* 2  bDescriptorsubtype, HEADER */
-  0x10, 0x01,                /* 3  bcdCDC */
-
-  /* ACM Functional descriptor */
-  0x04,                      /* 0  bLength */
-  USB_DESCTYPE_CS_INTERFACE, /* 1  bDescriptortype, CS_INTERFACE */
-  0x02,                      /* 2  bDescriptorsubtype, ABSTRACT CONTROL MANAGEMENT */
-  0x02,                      /* 3  bmCapabilities: Supports subset of ACM commands */
-
-  /* Union Functional descriptor */
-  0x05,                     /* 0  bLength */
-  USB_DESCTYPE_CS_INTERFACE,/* 1  bDescriptortype, CS_INTERFACE */
-  0x06,                     /* 2  bDescriptorsubtype, UNION */
-  0x00,                     /* 3  bControlInterface - Interface 0 */
-  0x01,                     /* 4  bSubordinateInterface0 - Interface 1 */
-
-  /* Call Management Functional descriptor */
-  0x05,                     /* 0  bLength */
-  USB_DESCTYPE_CS_INTERFACE,/* 1  bDescriptortype, CS_INTERFACE */
-  0x01,                     /* 2  bDescriptorsubtype, CALL MANAGEMENT */
-  0x03,                     /* 3  bmCapabilities, DIY */
-  0x01,                     /* 4  bDataInterface */
-
-  /* Notification Endpoint descriptor */
-  0x07,                         /* 0  bLength */
-  USB_DESCTYPE_ENDPOINT,        /* 1  bDescriptorType */
-  (CDC_NOTIFICATION_EP_NUM | 0x80),/* 2  bEndpointAddress */
-  0x03,                         /* 3  bmAttributes */
-  0x40,                         /* 4  wMaxPacketSize - Low */
-  0x00,                         /* 5  wMaxPacketSize - High */
-  0xFF,                         /* 6  bInterval */
-
-  /* CDC Data interface */
-  0x09,                     /* 0  bLength */
-  USB_DESCTYPE_INTERFACE,   /* 1  bDescriptorType */
-  0x01,                     /* 2  bInterfacecNumber */
-  0x00,                     /* 3  bAlternateSetting */
-  0x02,                     /* 4  bNumEndpoints */
-  USB_CLASS_CDC_DATA,       /* 5  bInterfaceClass */
-  0x00,                     /* 6  bInterfaceSubClass */
-  0x00,                     /* 7  bInterfaceProtocol*/
-  0x00,                     /* 8  iInterface - No string descriptor*/
-
-  /* Data OUT Endpoint descriptor */
-  0x07,                     /* 0  bLength */
-  USB_DESCTYPE_ENDPOINT,    /* 1  bDescriptorType */
-  CDC_DATA_RX_EP_NUM,       /* 2  bEndpointAddress */
-  0x02,                     /* 3  bmAttributes */
-  0x00,                     /* 4  wMaxPacketSize - Low */
-  0x02,                     /* 5  wMaxPacketSize - High */
-  0x00,                     /* 6  bInterval */
-
-  /* Data IN Endpoint descriptor */
-  0x07,                     /* 0  bLength */
-  USB_DESCTYPE_ENDPOINT,    /* 1  bDescriptorType */
-  (CDC_DATA_TX_EP_NUM | 0x80),/* 2  bEndpointAddress */
-  0x02,                     /* 3  bmAttributes */
-  0x00,                     /* 4  wMaxPacketSize - Low byte */
-  0x02,                     /* 5  wMaxPacketSize - High byte */
-  0x01                      /* 6  bInterval */
-};
-
-unsafe{
-  /* String table - unsafe as accessed via shared memory */
-  static char * unsafe stringDescriptors[]=
-  {
-    "\x09\x04",             /* Language ID string (US English) */
-    "XMOS",                 /* iManufacturer */
-    "CDC Virtual COM Port", /* iProduct */
-    "0123456789"            /* iSerialNumber */
-    "Config",               /* iConfiguration string */
-  };
-}
-#endif
 
 /* CDC Class-specific requests handler function */
 XUD_Result_t ControlInterfaceClassRequests(XUD_ep ep_out, XUD_ep ep_in, USB_SetupPacket_t sp)

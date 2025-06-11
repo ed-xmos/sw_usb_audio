@@ -1,10 +1,5 @@
-/*
- * cdc_descriptor_defs.h
- *
- *  Created on: 4 Sep 2015
- *      Author: thomas
- */
-
+// Copyright 2025 XMOS LIMITED.
+// This Software is subject to the terms of the XMOS Public Licence: Version 1.
 
 #ifndef CDC_DESCRIPTOR_DEFS_H_
 #define CDC_DESCRIPTOR_DEFS_H_

@@ -7,12 +7,12 @@
 void UserAudioStreamStart(void)
 {
     /* Turn all LEDs on */
-    // p_leds <: 0xF;
+    // p_leds <: 0xF; // We are using the LED port for the CDC demo
 }
 
 void UserAudioStreamStop(void)
 {
     /* Turn all LEDs off */
-    // p_leds <: 0x0;
+    // p_leds <: 0x0; // We are using the LED port for the CDC demo
 }
 
