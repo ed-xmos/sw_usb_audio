@@ -34,19 +34,19 @@ pipeline {
 
     string(
       name: 'XMOSDOC_VERSION',
-      defaultValue: 'v7.0.0',
+      defaultValue: 'v7.2.0',
       description: 'The xmosdoc version')
 
     string(
       name: 'INFR_APPS_VERSION',
-      defaultValue: 'develop',
+      defaultValue: 'v2.2.0',
       description: 'The infr_apps version'
     )
   }
   environment {
     REPO = 'sw_usb_audio'
     VIEW = getViewName(REPO)
-    TOOLS_VERSION = "15.3.0"
+    TOOLS_VERSION = "15.3.1"
     PREV_TOOLS_VERSION = "15.2.1"
   }
   stages {

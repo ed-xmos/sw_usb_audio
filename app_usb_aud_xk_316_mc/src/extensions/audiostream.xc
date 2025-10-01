@@ -4,15 +4,9 @@
 
 // on tile[0]: out port p_leds = XS1_PORT_4F;
 
-void UserAudioStreamStart(void)
+void UserAudioStreamState(int inputActive, int outputActive)
 {
     /* Turn all LEDs on */
     // p_leds <: 0xF; // We are using the LED port for the CDC demo
-}
-
-void UserAudioStreamStop(void)
-{
-    /* Turn all LEDs off */
-    // p_leds <: 0x0; // We are using the LED port for the CDC demo
 }
 
